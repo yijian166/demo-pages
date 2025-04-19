@@ -1,2 +1,2 @@
-# demo-pages
-demo pages
+# Demo Pages
+
