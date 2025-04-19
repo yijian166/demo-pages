@@ -1,7 +1,6 @@
 import { LineChat } from '@components/chats/line-chat';
 import { loadData } from '@components/chats/files';
 import { Suspense } from 'react';
-export const dynamic = 'force-dynamic';
 export default function PuppeteerBrowserLargePdfPage(props) {
   const data = loadData(true);
   return (
