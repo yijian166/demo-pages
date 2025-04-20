@@ -1,9 +1,7 @@
-import { readFile } from 'fs/promises';
-const fetchData = async (csvName = 'full-chrome') => {
-  const data = await readFile(
-    `${process.cwd()}/components/chats/files/${csvName}.csv`,
-    'utf8'
-  );
+import { list as blobList } from '@vercel/blob';
+const fetchData = async (urlList,csvName = 'full-chrome') => {
+  const data = await fetch(urlList.find((item) => item.pathname.endsWith(`${csvName}.csv`)).downloadUrl).then((res) => res.text());
+  
   const [, ...list] = data.split('\n').filter(Boolean);
   const newList = [];
   let tempList = [];
@@ -51,11 +49,15 @@ const fetchData = async (csvName = 'full-chrome') => {
 };
 
 export async function loadData() {
+  const { blobs } = await blobList({
+    prefix: `puppeteer`,
+    // mode: 'folded',
+  });
   const [chrome, firefox, nfChrome, nfFirefox] = await Promise.all([
-    fetchData('full-chrome'),
-    fetchData('full-firefox'),
-    fetchData('nofull-chrome'),
-    fetchData('nofull-firefox'),
+    fetchData(blobs, 'full-chrome'),
+    fetchData(blobs, 'full-firefox'),
+    fetchData(blobs, 'nofull-chrome'),
+    fetchData(blobs, 'nofull-firefox'),
   ]);
   const min = Math.min(
     chrome[0][0],
